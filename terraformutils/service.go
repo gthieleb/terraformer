@@ -55,11 +55,8 @@ func (s *Service) GenerateModuleOutput() error {
 }
 
 func (s *Service) InitResources() error {
-	if err := s.initializeResources(); err != nil {
-		return err
-	}
-
-	if moduleOutput {
+	// Check if module output is enabled through args
+	if moduleOutput, ok := s.Args["module_output"].(bool); ok && moduleOutput {
 		return s.GenerateModuleOutput()
 	}
 	return nil
@@ -159,9 +156,6 @@ func (s *Service) SetResources(resources []Resource) {
 	s.Resources = resources
 }
 
-func (s *Service) InitResources() error {
-	panic("implement me")
-}
 
 func (s *Service) PostConvertHook() error {
 	return nil
