@@ -23,13 +23,14 @@ import (
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils/providerwrapper"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform/terraform"
 	"github.com/zclconf/go-cty/cty"
 )
 
 type Resource struct {
-	InstanceInfo      *schema.ResourceData
-	InstanceState     *schema.ResourceData
-	Outputs           map[string]*schema.ResourceData `json:",omitempty"`
+	InstanceInfo      *terraform.InstanceInfo
+	InstanceState     *terraform.InstanceState
+	Outputs           map[string]*terraform.InstanceState `json:",omitempty"`
 	ResourceName      string
 	Provider          string
 	Item              map[string]interface{} `json:",omitempty"`
