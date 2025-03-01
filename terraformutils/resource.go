@@ -22,7 +22,6 @@ import (
 	"time"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils/providerwrapper"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 	"github.com/zclconf/go-cty/cty"
 )

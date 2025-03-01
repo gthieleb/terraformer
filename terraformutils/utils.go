@@ -37,7 +37,11 @@ func NewTfState(resources []Resource) *terraform.State {
 	outputs := map[string]*terraform.OutputState{}
 	for _, r := range resources {
 		for k, v := range r.Outputs {
-			outputs[k] = v
+			outputs[k] = &terraform.OutputState{
+				Type:      "string",
+				Value:     v.ID,
+				Sensitive: false,
+			}
 		}
 	}
 	tfstate.Modules = []*terraform.ModuleState{
