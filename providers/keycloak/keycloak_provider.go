@@ -109,7 +109,8 @@ func (p *KeycloakProvider) InitService(serviceName string, verbose bool) error {
 
 func (p *KeycloakProvider) GetSupportedService() map[string]terraformutils.ServiceGenerator {
 	return map[string]terraformutils.ServiceGenerator{
-		"realms": &RealmGenerator{},
+		"realms":   &RealmGenerator{},
+		"clients":  &ClientGenerator{},
 	}
 }
 
