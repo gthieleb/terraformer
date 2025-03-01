@@ -24,6 +24,18 @@ import (
 	"github.com/hashicorp/terraform/terraform"
 )
 
+func convertOutputStateToInstanceState(outputState map[string]*terraform.OutputState) map[string]*terraform.InstanceState {
+	result := make(map[string]*terraform.InstanceState)
+	for k, v := range outputState {
+		result[k] = &terraform.InstanceState{
+			Attributes: map[string]string{
+				"value": v.Value.(string),
+			},
+		}
+	}
+	return result
+}
+
 func OutputHclFiles(resources []terraformutils.Resource, provider terraformutils.ProviderGenerator, path string, serviceName string, isCompact bool, output string, sort bool) error {
 	if err := os.MkdirAll(path, os.ModePerm); err != nil {
 		return err
@@ -84,7 +96,7 @@ func OutputHclFiles(resources []terraformutils.Resource, provider terraformutils
 				}
 			}
 		}
-		resources[i].Outputs = outputState
+		resources[i].Outputs = convertOutputStateToInstanceState(outputState)
 	}
 	if len(outputsByResource) > 0 {
 		outputs["output"] = outputsByResource
