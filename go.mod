@@ -3,8 +3,12 @@ module github.com/GoogleCloudPlatform/terraformer
 go 1.22
 
 require (
-	cloud.google.com/go v0.112.1 // indirect
+	cloud.google.com/go v0.112.1
+	cloud.google.com/go/cloudbuild v1.15.1
+	cloud.google.com/go/cloudtasks v1.12.6
+	cloud.google.com/go/iam v1.1.6
 	cloud.google.com/go/logging v1.9.0
+	cloud.google.com/go/monitoring v1.18.0
 	cloud.google.com/go/storage v1.38.0
 	github.com/Azure/azure-sdk-for-go v63.4.0+incompatible
 	github.com/Azure/azure-storage-blob-go v0.10.0
