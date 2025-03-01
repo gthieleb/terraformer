@@ -114,40 +114,6 @@ variable "%s" {
 	return nil
 }
 
-func (g *ModuleGenerator) generateTFVars(resourcesByType map[string][]Resource) error {
-	for resourceType, resources := range resourcesByType {
-		tfvars := make(map[string]interface{})
-		
-		for _, resource := range resources {
-			// Remove any empty or nil values
-			cleanedItems := g.cleanResourceItems(resource.Item)
-			if len(cleanedItems) > 0 {
-				tfvars[resource.ResourceName] = cleanedItems
-			}
-		}
-
-		// Determine output file based on size
-		var filename string
-		if len(tfvars) > 100 {
-			filename = fmt.Sprintf("%s.tfvars.json", resourceType)
-		} else {
-			filename = "terraform.tfvars.json"
-		}
-
-		// Write to file
-		f, err := os.Create(filepath.Join(g.path, filename))
-		if err != nil {
-			return err
-		}
-		
-		if err := json.NewEncoder(f).Encode(tfvars); err != nil {
-			f.Close()
-			return err
-		}
-		f.Close()
-	}
-	return nil
-}
 
 func (g *ModuleGenerator) getVariableName(resourceType string) string {
 	return strings.Replace(resourceType, "-", "_", -1)
