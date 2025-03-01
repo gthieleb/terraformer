@@ -20,12 +20,17 @@ func TestMain(m *testing.M) {
 	var err error
 	
 	// Setup Keycloak container
-	keycloakContainer, err = keycloak.RunContainer(ctx,
-		"keycloak/keycloak:24.0",
+	keycloakContainer, err = keycloak.NewContainer(ctx,
+		keycloak.WithVersion("24.0"),
 		keycloak.WithContextPath("/auth"),
 		keycloak.WithAdminUsername("admin"),
 		keycloak.WithAdminPassword("admin"),
 	)
+	if err != nil {
+		panic(err)
+	}
+
+	err = keycloakContainer.Start(ctx)
 	if err != nil {
 		panic(err)
 	}
