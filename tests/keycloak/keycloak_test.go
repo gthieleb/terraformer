@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
-	"github.com/hashicorp/terraform/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/stillya/testcontainers-keycloak"
 	"github.com/stretchr/testify/assert"
 )
@@ -51,8 +51,8 @@ func TestKeycloakModuleGeneration(t *testing.T) {
 	resources := []terraformutils.Resource{
 		{
 			ResourceName: "test_realm",
-			InstanceInfo: &terraform.InstanceInfo{
-				Type: "keycloak_realm",
+			InstanceState: &schema.ResourceData{
+				Id: "keycloak_realm",
 			},
 			Item: map[string]interface{}{
 				"realm": "test-realm",
