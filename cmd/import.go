@@ -414,5 +414,5 @@ func baseProviderFlags(flag *pflag.FlagSet, options *ImportOptions, sampleRes, s
 	flag.BoolVarP(&options.NoSort, "no-sort", "S", false, "set to disable sorting of HCL")
 	flag.StringVarP(&options.Output, "output", "O", "hcl", "output format hcl or json")
 	flag.IntVarP(&options.RetryCount, "retry-number", "n", 5, "number of retries to perform when refresh fails")
-	flag.IntVarP(&options.RetrySleepMs, "retry-sleep-ms", "m", 300, "time in ms to sleep between retries")
+	flag.IntVarP(&options.RetrySleepMs, "retry-sleep-ms", "s", 300, "time in ms to sleep between retries")
 }
