@@ -54,6 +54,7 @@ type ImportOptions struct {
 	NoSort        bool
 	RetryCount    int
 	RetrySleepMs  int
+	ModuleOutput  bool
 }
 
 const DefaultPathPattern = "{output}/{provider}/{service}/"
@@ -92,6 +93,12 @@ func Import(provider terraformutils.ProviderGenerator, options ImportOptions, ar
 		return err
 	}
 	defer providerWrapper.Kill()
+	
+	// Add module output to provider args
+	provider.GetService().SetArgs(map[string]interface{}{
+		"module_output": options.ModuleOutput,
+	})
+	
 	providerMapping := terraformutils.NewProvidersMapping(provider)
 
 	err = initAllServicesResources(providerMapping, options, args, providerWrapper)
@@ -395,6 +402,7 @@ func providerServices(provider terraformutils.ProviderGenerator) []string {
 func baseProviderFlags(flag *pflag.FlagSet, options *ImportOptions, sampleRes, sampleFilters string) {
 	flag.BoolVarP(&options.Connect, "connect", "c", true, "")
 	flag.BoolVarP(&options.Compact, "compact", "C", false, "")
+	flag.BoolVarP(&options.ModuleOutput, "module-output", "m", false, "Generate output as a reusable Terraform module")
 	flag.StringSliceVarP(&options.Resources, "resources", "r", []string{}, sampleRes)
 	flag.StringSliceVarP(&options.Excludes, "excludes", "x", []string{}, sampleRes)
 	flag.StringVarP(&options.PathPattern, "path-pattern", "p", DefaultPathPattern, "{output}/{provider}/")
