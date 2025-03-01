@@ -36,7 +36,22 @@ func (g *ModuleGenerator) Generate() error {
 		return err
 	}
 
-	return g.generateTFVars(resourcesByType)
+	// Generate tfvars with direct resource mapping
+	tfvars := make(map[string]interface{})
+	for _, resource := range g.resources {
+		if len(resource.Item) > 0 {
+			tfvars[resource.ResourceName] = resource.Item
+		}
+	}
+
+	// Write to terraform.tfvars.json
+	f, err := os.Create(filepath.Join(g.path, "terraform.tfvars.json"))
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	return json.NewEncoder(f).Encode(tfvars)
 }
 
 func (g *ModuleGenerator) groupResourcesByType() map[string][]Resource {
