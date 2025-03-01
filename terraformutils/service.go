@@ -49,6 +49,22 @@ type Service struct {
 	Verbose      bool
 }
 
+func (s *Service) GenerateModuleOutput() error {
+	generator := NewModuleGenerator(s.Resources, "module-output")
+	return generator.Generate()
+}
+
+func (s *Service) InitResources() error {
+	if err := s.initializeResources(); err != nil {
+		return err
+	}
+
+	if moduleOutput {
+		return s.GenerateModuleOutput()
+	}
+	return nil
+}
+
 func (s *Service) SetProviderName(providerName string) {
 	s.ProviderName = providerName
 }

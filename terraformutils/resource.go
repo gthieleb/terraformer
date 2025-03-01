@@ -40,6 +40,26 @@ type Resource struct {
 	DataFiles         map[string][]byte
 }
 
+func (r *Resource) ToModuleFormat() map[string]interface{} {
+	result := make(map[string]interface{})
+	
+	// Copy all non-empty values
+	for k, v := range r.Item {
+		if v != nil && v != "" {
+			result[k] = v
+		}
+	}
+
+	// Add any additional fields
+	for k, v := range r.AdditionalFields {
+		if v != nil && v != "" {
+			result[k] = v
+		}
+	}
+
+	return result
+}
+
 type ApplicableFilter interface {
 	IsApplicable(resourceName string) bool
 }
