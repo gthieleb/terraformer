@@ -96,6 +96,11 @@ func Import(provider terraformutils.ProviderGenerator, options ImportOptions, ar
 	
 	providerMapping := terraformutils.NewProvidersMapping(provider)
 
+	// Add module output to provider args before initializing resources
+	provider.GetService().SetArgs(map[string]interface{}{
+		"module_output": options.ModuleOutput,
+	})
+
 	err = initAllServicesResources(providerMapping, options, args, providerWrapper)
 	if err != nil {
 		return err
