@@ -20,7 +20,7 @@ func TestMain(m *testing.M) {
 	var err error
 	
 	// Setup Keycloak container
-	keycloakContainer, err = keycloak.RunContainer(ctx,
+	keycloakContainer, err = keycloak.Run(ctx,
 		"quay.io/keycloak/keycloak:24.0",
 		keycloak.WithContextPath("/auth"),
 		keycloak.WithAdminUsername("admin"),
