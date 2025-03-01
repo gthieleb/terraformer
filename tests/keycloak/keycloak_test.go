@@ -9,7 +9,7 @@ import (
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
 	"github.com/hashicorp/terraform/terraform"
-	"github.com/testcontainers/testcontainers-go/modules/keycloak"
+	keycloak "github.com/stillya/testcontainers-keycloak"
 	"github.com/stretchr/testify/assert"
 )
 
