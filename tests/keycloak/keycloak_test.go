@@ -51,8 +51,8 @@ func TestKeycloakModuleGeneration(t *testing.T) {
 	resources := []terraformutils.Resource{
 		{
 			ResourceName: "test_realm",
-			InstanceInfo: &schema.ResourceData{
-				Id: "keycloak_realm",
+			InstanceInfo: &terraform.InstanceInfo{
+				Type: "keycloak_realm",
 			},
 			Item: map[string]interface{}{
 				"realm": "test-realm",
@@ -62,8 +62,8 @@ func TestKeycloakModuleGeneration(t *testing.T) {
 		},
 		{
 			ResourceName: "test_user",
-			InstanceInfo: &schema.ResourceData{
-				Id: "keycloak_user",
+			InstanceInfo: &terraform.InstanceInfo{
+				Type: "keycloak_user",
 			},
 			Item: map[string]interface{}{
 				"realm_id": "test-realm",
