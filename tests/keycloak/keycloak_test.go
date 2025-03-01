@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
-	"github.com/hashicorp/terraform/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stillya/testcontainers-keycloak"
 	"github.com/stretchr/testify/assert"
 )
