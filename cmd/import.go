@@ -54,6 +54,7 @@ type ImportOptions struct {
 	NoSort        bool
 	RetryCount    int
 	RetrySleepMs  int
+	ModuleOutput  bool
 }
 
 const DefaultPathPattern = "{output}/{provider}/{service}/"
@@ -250,12 +251,28 @@ func ImportFromPlan(provider terraformutils.ProviderGenerator, plan *ImportPlan)
 
 func printService(provider terraformutils.ProviderGenerator, serviceName string, options ImportOptions, resources []terraformutils.Resource, importedResource map[string][]terraformutils.Resource) error {
 	log.Println(provider.GetName() + " save " + serviceName)
-	// Print HCL files for Resources
-	path := Path(options.PathPattern, provider.GetName(), serviceName, options.PathOutput)
-	err := terraformoutput.OutputHclFiles(resources, provider, path, serviceName, options.Compact, options.Output, !options.NoSort)
-	if err != nil {
-		return err
+	
+	// If module output is enabled, generate module instead of individual HCL files
+	if options.ModuleOutput {
+		// For module output, we only generate the module once for all services
+		if serviceName == "" || !strings.Contains(options.PathPattern, "{service}") {
+			path := Path(options.PathPattern, provider.GetName(), "", options.PathOutput)
+			moduleGenerator := terraformutils.NewModuleOutputGenerator(resources, path, provider.GetName())
+			if err := moduleGenerator.GenerateModuleOutput(); err != nil {
+				return err
+			}
+		}
+	} else {
+		// Print HCL files for Resources (standard output)
+		path := Path(options.PathPattern, provider.GetName(), serviceName, options.PathOutput)
+		err := terraformoutput.OutputHclFiles(resources, provider, path, serviceName, options.Compact, options.Output, !options.NoSort)
+		if err != nil {
+			return err
+		}
 	}
+	
+	// Generate tfstate regardless of output mode
+	path := Path(options.PathPattern, provider.GetName(), serviceName, options.PathOutput)
 	tfStateFile, err := terraformutils.PrintTfState(resources)
 	if err != nil {
 		return err
@@ -407,4 +424,5 @@ func baseProviderFlags(flag *pflag.FlagSet, options *ImportOptions, sampleRes, s
 	flag.StringVarP(&options.Output, "output", "O", "hcl", "output format hcl or json")
 	flag.IntVarP(&options.RetryCount, "retry-number", "n", 5, "number of retries to perform when refresh fails")
 	flag.IntVarP(&options.RetrySleepMs, "retry-sleep-ms", "m", 300, "time in ms to sleep between retries")
+	flag.BoolVarP(&options.ModuleOutput, "module-output", "M", false, "generate output as a reusable Terraform module")
 }
